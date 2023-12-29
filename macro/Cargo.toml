@@ -12,6 +12,11 @@ keywords = ["mlir", "llvm"]
 [lib]
 proc-macro = true
 
+[features]
+default = ["tblgen/llvm17-0", "mlir-sys/default"]
+llvm17-0 = ["tblgen/llvm17-0", "mlir-sys/default"]
+llvm-trunk = ["tblgen/llvm-trunk", "mlir-sys/llvm-trunk"]
+
 [dependencies]
 comrak = "0.21.0"
 convert_case = "0.6.0"
@@ -20,10 +25,10 @@ proc-macro2 = "1"
 quote = "1"
 regex = "1.10.3"
 syn = { version = "2", features = ["full"] }
-tblgen = { version = "0.3.0", features = ["llvm17-0"], default-features = false }
+tblgen = { version = "0.3.0", default-features = false }
 unindent = "0.2.3"
 
 [dev-dependencies]
 melior = { path = "../melior", features = ["ods-dialects"] }
-mlir-sys = "0.2"
+mlir-sys = { version = "0.2", default_features = false }
 pretty_assertions = "1.4.0"

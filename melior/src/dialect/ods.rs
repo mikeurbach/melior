@@ -23,9 +23,15 @@ melior_macro::dialect! {
     name: "arm_neon",
     table_gen: r#"include "mlir/Dialect/ArmNeon/ArmNeon.td""#
 }
+#[cfg(feature = "llvm17-0")]
 melior_macro::dialect! {
     name: "arm_sve",
     table_gen: r#"include "mlir/Dialect/ArmSVE/ArmSVE.td""#
+}
+#[cfg(feature = "llvm-trunk")]
+melior_macro::dialect! {
+    name: "arm_sve",
+    table_gen: r#"include "mlir/Dialect/ArmSVE/IR/ArmSVE.td""#
 }
 melior_macro::dialect! {
     name: "async",

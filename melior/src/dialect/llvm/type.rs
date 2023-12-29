@@ -6,7 +6,7 @@ use crate::{
 };
 use mlir_sys::{
     mlirLLVMArrayTypeGet, mlirLLVMFunctionTypeGet, mlirLLVMPointerTypeGet,
-    mlirLLVMStructTypeLiteralGet, mlirLLVMVoidTypeGet,
+    mlirLLVMStructTypeLiteralGet, mlirLLVMVoidTypeGet, mlirTypeGetContext,
 };
 
 // TODO Check if the `llvm` dialect is loaded on use of those functions.
@@ -39,7 +39,14 @@ pub fn opaque_pointer(context: &Context) -> Type {
 
 /// Creates an LLVM pointer type.
 pub fn pointer(r#type: Type, address_space: u32) -> Type {
-    unsafe { Type::from_raw(mlirLLVMPointerTypeGet(r#type.to_raw(), address_space)) }
+    unsafe {
+        #[cfg(feature = "llvm17-0")]
+        let type_argument = r#type.to_raw();
+        #[cfg(feature = "llvm-trunk")]
+        let type_argument = mlirTypeGetContext(r#type.to_raw());
+
+        Type::from_raw(mlirLLVMPointerTypeGet(type_argument, address_space))
+    }
 }
 
 /// Creates an LLVM struct type.
